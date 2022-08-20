@@ -1,5 +1,7 @@
-from xmlrpc.client import Boolean
 import requests, json
+from xmlrpc.client import Boolean
+from datetime import datetime
+
 
 class LiveTicker:
     def __init__(self) -> None:
@@ -25,7 +27,6 @@ class LiveTicker:
         self.price_map = []
 
     def _is_valid_response(self) -> Boolean:
-        print('_is_valid_response called')
         if self.response == None or self.response.status_code != requests.codes.ok:
             return False
         if self.response.json().get('error') != None:
@@ -34,7 +35,6 @@ class LiveTicker:
         return (len(self.results) == len(self.symbols))
 
     def _parse_response(self):
-        print('_parse_response called')
         for obj in self.results:
             map = {}
             map['symbol'] = obj.get('symbol')
@@ -45,5 +45,5 @@ class LiveTicker:
         user_agent_headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
         symbols = ",".join(self.symbols)
         url = "https://query1.finance.yahoo.com/v7/finance/quote?symbols={}".format(symbols)
-        print(url)
+        print(datetime.now().time(), url)
         self.response = requests.get(url=url, headers=user_agent_headers)
